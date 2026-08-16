@@ -27,9 +27,10 @@ You MUST use the CodeAssist MCP tools (`semantic_code_search`, `query_architectu
 
 **Step 5: Output Generation**
 Format the output strictly as Markdown, containing:
-1. **System Architecture Overview:** High-level summary of the bounded contexts and their responsibilities. Include a **C4 Level 1 Context Diagram (Mermaid)** showing the system and its external users/dependencies.
-2. **Component Topology (Mermaid Diagram):** Generate a **C4 Level 2/3 Component Diagram (Mermaid)** visualizing the modules, microservices, and their dependencies on data stores or message brokers derived from Steps 3 and 4. Do not hallucinate connections.
-3. **Core Workflow / Flowchart (Mermaid):** Generate a **Mermaid Flowchart or Sequence Diagram** depicting the most critical cross-boundary execution path discovered in Step 3.
-4. **Hierarchy Structure:** Provide a text-based hierarchy tree mapping the core modules and their physical folder paths or namespaces to visualize the repository layout.
-5. **Infrastructure Details:** List the data stores, caches, and message brokers discovered in Step 4.
-6. **Graph Metrics:** Include EXACT metrics obtained from your queries (e.g., "The Order module contains X classes and Y methods with Z cross-module dependencies").
+1. **Version Control Block:** Include a blockquote at the very beginning of the document specifying the Git Commit Hash and Branch used to generate this document (obtained from `get_project_context`).
+2. **System Architecture Overview:** High-level summary of the bounded contexts and their responsibilities. Include a **C4 Level 1 Context Diagram (Mermaid)** showing the system and its external users/dependencies.
+3. **Component Topology (Mermaid Diagram):** Generate a **C4 Level 2/3 Component Diagram (Mermaid)** visualizing the modules, microservices, and their dependencies on data stores or message brokers derived from Steps 3 and 4. Do not hallucinate connections.
+4. **Core Workflow / Flowchart (Mermaid):** Generate a **Mermaid Flowchart or Sequence Diagram** depicting the most critical cross-boundary execution path discovered in Step 3.
+5. **Hierarchy Structure:** Provide a text-based hierarchy tree mapping the core modules and their physical folder paths or namespaces to visualize the repository layout.
+6. **Infrastructure Details:** List the data stores, caches, and message brokers discovered in Step 4.
+7. **Graph Metrics:** Include EXACT metrics obtained from your queries (e.g., "The Order module contains X classes and Y methods with Z cross-module dependencies").

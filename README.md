@@ -5,6 +5,8 @@ A highly scalable, fast, and 0-hallucination engine for reverse-engineering mass
 ## 🌟 How It Works
 
 CodeAssist solves the "massive codebase LLM context window" problem by parsing a target repository locally into a **Data Warehouse** before the LLM ever sees it. 
+*See what's new in the **[Changelog (v2.0.0)](./CHANGELOG.md)**!*
+
 1. **Tree-sitter AST Extraction:** Scripts parse C#, Java, HTML, and CSS to extract structural metadata (classes, methods, relationships).
 2. **Local Storage:** The structure is stored in a fast **SQLite Graph Database**, while docstrings and comments are vectorized into a **ChromaDB Vector Database**.
 3. **MCP Server:** A FastMCP-powered Python server connects to your LLM (Claude Desktop, Cursor, Antigravity) and exposes surgical tools (`get_node_details`, `query_architecture_graph`, `get_source_code`).
@@ -45,6 +47,9 @@ python src/server.py
 ```bash
 TARGET_REPO=/path/to/target/repository python src/server.py
 ```
+
+### 4. Scoped Documentation Generation
+CodeAssist natively supports generating documentation for specific modules, folders, or single microservices! For an in-depth explanation of how CodeAssist handles Graph Boundaries, Monorepos vs. Microservice Repos, and Frontend-only scoping, please read the **[`SCOPING_AND_BOUNDARIES.md`](./SCOPING_AND_BOUNDARIES.md)** guide.
 
 ---
 

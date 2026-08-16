@@ -24,11 +24,12 @@ You MUST use the CodeAssist MCP tools (`semantic_code_search`, `query_architectu
 
 **Step 5: Output Generation**
 Format the output strictly as Markdown, containing:
-1. **API Overview:** High-level summary of the API surface (e.g., total number of endpoints, protocols used like HTTP/gRPC).
-2. **Authentication/Security:** The security mechanisms discovered in Step 4.
-3. **Endpoint Reference:** 
+1. **Version Control Block:** Include a blockquote at the very beginning of the document specifying the Git Commit Hash and Branch used to generate this document (obtained from `get_project_context`).
+2. **API Overview:** High-level summary of the API surface (e.g., total number of endpoints, protocols used like HTTP/gRPC).
+3. **Authentication/Security:** The security mechanisms discovered in Step 4.
+4. **Endpoint Reference:** 
    - A detailed list of all discovered APIs. 
    - Group them by Module or Controller.
    - For each endpoint, include: `[HTTP Method] /route/path` (if REST), the Request Payload schema, and the Response format.
    - Summarize the business logic of each endpoint based on the comments retrieved in Step 2.
-4. **Data Models (DTOs):** A brief reference of the core JSON/Protobuf data shapes exchanged.
+5. **Data Models (DTOs):** A brief reference of the core JSON/Protobuf data shapes exchanged.

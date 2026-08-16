@@ -83,14 +83,24 @@ def get_project_context() -> Dict[str, Any]:
     """
     import pathlib
     import re
+    import subprocess
     from language_registry import PARSERS
     
     context = {}
+    
+    repo_path = pathlib.Path(TARGET_REPO)
+    
+    # Extract Git Context
+    try:
+        commit_hash = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=TARGET_REPO, stderr=subprocess.DEVNULL).decode('utf-8').strip()
+        branch = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], cwd=TARGET_REPO, stderr=subprocess.DEVNULL).decode('utf-8').strip()
+        context["git_context"] = {"commit_hash": commit_hash, "branch": branch}
+    except Exception:
+        pass
+        
     found_files = {}
     dependencies = set()
     frameworks = set()
-    
-    repo_path = pathlib.Path(TARGET_REPO)
     
     for parser in PARSERS:
         for pattern in parser.get_patterns():

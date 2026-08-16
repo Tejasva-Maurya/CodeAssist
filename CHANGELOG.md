@@ -1,0 +1,31 @@
+# CodeAssist Changelog
+
+All notable changes to the CodeAssist project will be documented in this file.
+
+## [2.0.0] - The Agile & Tracking Update
+This release focuses on making CodeAssist an enterprise-ready project management and documentation tool, introducing dynamic scoping, strict version tracking, and Agile pipeline generation.
+
+### Added
+- **Document-Level Git Versioning:** All core generated documents (BRS, Architecture, API Specs) now strictly require a "Version Control Block" at the top, stamping the document with the exact Git Commit Hash and branch for traceability.
+- **Hierarchical Feature List Skill (`generate_feature_list.md`):** A new playbook that extracts macro, standard, and micro features from the codebase. Supports dynamic scoping (root vs module level) and outputs a visual directory tree structure for easy repository navigation.
+- **Agile Backlog Pipeline Skill (`generate_agile_backlog.md`):** A powerful new state-machine playbook that converts a vague business idea into a full agile backlog. Features asynchronous, non-blocking execution across 3 distinct phases: Epic (Business), User Story (Hybrid), and Spikes/Tasks (Technical).
+- **Jira/ADO CSV Export:** The Agile Backlog skill now automatically formats all generated Epics, Stories, and Tasks into a CSV code block at the end of execution for instant bulk-import into Jira or Azure DevOps.
+- **Scope & Boundaries Guide (`SCOPING_AND_BOUNDARIES.md`):** Comprehensive documentation explaining how the system behaves when isolated to a specific module, frontend vs backend, or a single microservice repository.
+
+### Changed
+- Refactored the core Language Configuration Registry in `server.py` to use a Strategy Pattern (`language_registry.py`), cleanly isolating manifest parsers and ensuring OCP compliance for future language support.
+
+---
+
+## [1.0.0] - Base Version
+The foundational release establishing the Map-Reduce reverse engineering engine.
+
+### Added
+- **Tree-sitter AST Extractors:** Full structural parsing support for C#, Java, HTML, and CSS.
+- **Local Data Warehouse:** SQLite Graph Database for relationships (Nodes/Edges) and ChromaDB Vector Database for semantic search over docstrings and comments.
+- **FastMCP Python Server:** Core MCP tools enabling LLMs to safely query the local database without hallucinating (`get_node_details`, `query_architecture_graph`, `get_source_code`, `get_project_context`).
+- **Core Playbooks (Skills):**
+  - `generate_brs.md`: Reverse engineers a Business Requirements Specification.
+  - `generate_architecture.md`: Generates Enterprise Architecture Documentation with C4 Context/Component diagrams and execution flowcharts.
+  - `generate_api_spec.md`: Reverse engineers an API Specification document (REST/gRPC/GraphQL).
+- **Language Registry Support:** Out-of-the-box infrastructure parsing for Java, C#, Node, Python, and Docker manifests.

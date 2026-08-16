@@ -30,8 +30,9 @@ You MUST use the CodeAssist MCP tools (`semantic_code_search`, `query_architectu
 
 **Step 5: Output Generation**
 Format the output strictly as Markdown, containing:
-1. **Executive Summary:** High-level summary of what the system does based on your semantic searches.
-2. **Business Domain:** Core capabilities derived from the domain entities.
-3. **Microservices / Module Breakdown:** Include EXACT metrics (e.g., "Module X contains Y classes and Z methods") and list the key classes based on the Graph DB.
-4. **Data Flows:** Detail the execution paths you traced in Step 3. Include Mermaid diagrams to visualize `CALLS` flows.
-5. **Data Architecture:** The infrastructure you discovered in Step 4.
+1. **Version Control Block:** Include a blockquote at the very beginning of the document specifying the Git Commit Hash and Branch used to generate this document (obtained from `get_project_context`).
+2. **Executive Summary:** High-level summary of what the system does based on your semantic searches.
+3. **Business Domain:** Core capabilities derived from the domain entities.
+4. **Microservices / Module Breakdown:** Include EXACT metrics (e.g., "Module X contains Y classes and Z methods") and list the key classes based on the Graph DB.
+5. **Data Flows:** Detail the execution paths you traced in Step 3. Include Mermaid diagrams to visualize `CALLS` flows.
+6. **Data Architecture:** The infrastructure you discovered in Step 4.
