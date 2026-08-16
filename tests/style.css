@@ -1,0 +1,10 @@
+/* General styling */
+@import url("theme.css");
+
+#login-container {
+    padding: 20px;
+}
+
+.input-field {
+    border: 1px solid #ccc;
+}
