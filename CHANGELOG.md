@@ -2,6 +2,18 @@
 
 All notable changes to the CodeAssist project will be documented in this file.
 
+## [2.0.1] - Performance & Stability Overhaul
+This patch focuses on eliminating I/O bottlenecks, resolving JSON-RPC socket corruption, and optimizing memory usage when analyzing project infrastructure.
+
+### Fixed
+- **JSON-RPC Stdio Corruption:** Replaced unbounded Git subprocess calls with `subprocess.run(capture_output=True)` to completely isolate the IDE connection from terminal output. This prevents fatal crashes when running CodeAssist on untracked repositories or directories with dubious ownership.
+
+### Changed
+- **I/O Performance Optimization:** Refactored `get_project_context` to use a single-pass `os.walk` with aggressive directory pruning. The server now completely skips ignored directories (like `node_modules` and `.git`), reducing repository scan times from minutes to milliseconds.
+- **Deep Manifest Parsing (Memory Optimization):** Upgraded `language_registry.py` to natively parse `requirements.txt`, `pyproject.toml`, and `Dockerfile` configurations instead of dumping raw file contents. This significantly reduces token consumption and memory bloat within the LLM's context window.
+
+---
+
 ## [2.0.0] - The Agile & Tracking Update
 This release focuses on making CodeAssist an enterprise-ready project management and documentation tool, introducing dynamic scoping, strict version tracking, and Agile pipeline generation.
 

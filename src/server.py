@@ -78,58 +78,76 @@ def get_source_code(file_path: str) -> Dict[str, Any]:
 @mcp.tool()
 def get_project_context() -> Dict[str, Any]:
     """
-    Retrieve the global configuration files and project context (like pom.xml, package.json, AppHost/Program.cs).
+    Retrieve global configuration files and project context (like pom.xml, package.json, AppHost/Program.cs).
     Use this to definitively identify the infrastructure, framework versions, and databases used by the repository.
     """
+    import fnmatch
     import pathlib
-    import re
     import subprocess
     from language_registry import PARSERS
     
     context = {}
     
-    repo_path = pathlib.Path(TARGET_REPO)
-    
-    # Extract Git Context
+    # Extract Git Context with an explicit timeout and capture_output to prevent JSON-RPC stream corruption
     try:
-        commit_hash = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=TARGET_REPO, stderr=subprocess.DEVNULL).decode('utf-8').strip()
-        branch = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], cwd=TARGET_REPO, stderr=subprocess.DEVNULL).decode('utf-8').strip()
-        context["git_context"] = {"commit_hash": commit_hash, "branch": branch}
+        commit_res = subprocess.run(
+            ['git', 'rev-parse', 'HEAD'], cwd=TARGET_REPO, capture_output=True, text=True, timeout=3
+        )
+        branch_res = subprocess.run(
+            ['git', 'rev-parse', '--abbrev-ref', 'HEAD'], cwd=TARGET_REPO, capture_output=True, text=True, timeout=3
+        )
+        if commit_res.returncode == 0 and branch_res.returncode == 0:
+            context["git_context"] = {"commit_hash": commit_res.stdout.strip(), "branch": branch_res.stdout.strip()}
     except Exception:
         pass
         
     found_files = {}
     dependencies = set()
     frameworks = set()
-    
+
+    IGNORED_DIRS = {"node_modules", "bin", "obj", "target", "venv", ".venv", ".git", ".codeassist", "build", "dist", "__pycache__"}
+
+    # Map parsers and patterns
+    parser_patterns = []
     for parser in PARSERS:
         for pattern in parser.get_patterns():
-            matches = list(repo_path.rglob(pattern.replace("**/", "")))
-            matches.sort()
-            
-            count = 0
-            for match in matches:
-                path_str = str(match)
-                if any(ignore in path_str for ignore in ["node_modules", "bin" + os.sep, "obj" + os.sep, "target" + os.sep, "venv", ".git"]):
-                    continue
+            clean_pattern = pattern.replace("**/", "")
+            parser_patterns.append((parser, clean_pattern))
+
+    # Single-pass file system walk with directory pruning
+    file_matches = {parser: set() for parser in PARSERS}
+    for root, dirs, files in os.walk(TARGET_REPO):
+        # Modifying dirs in-place prevents os.walk from scanning ignored folders
+        dirs[:] = [d for d in dirs if d not in IGNORED_DIRS and not d.startswith('.')]
+        
+        for file in files:
+            full_path = os.path.join(root, file)
+            for parser, pattern in parser_patterns:
+                if fnmatch.fnmatch(file, pattern) or fnmatch.fnmatch(full_path, pattern):
+                    file_matches[parser].add(full_path)
+
+    # Process collected configuration files
+    for parser, matches in file_matches.items():
+        sorted_matches = sorted(list(matches))
+        count = 0
+        for path_str in sorted_matches:
+            try:
+                with open(path_str, 'r', encoding='utf-8') as f:
+                    content = f.read()
                     
-                try:
-                    with open(match, 'r', encoding='utf-8') as f:
-                        content = f.read()
-                        
-                    rel_path = os.path.relpath(match, TARGET_REPO)
-                    
-                    if parser.is_manifest(path_str):
-                        parser.parse(path_str, content, dependencies, frameworks)
-                    else:
-                        if count >= 5:
-                            continue
-                        if len(content) > 10000:
-                            content = content[:10000] + "... [TRUNCATED]"
-                        found_files[rel_path] = content
-                        count += 1
-                except Exception:
-                    pass
+                rel_path = os.path.relpath(path_str, TARGET_REPO)
+                
+                if parser.is_manifest(path_str):
+                    parser.parse(path_str, content, dependencies, frameworks)
+                else:
+                    if count >= 5:
+                        continue
+                    if len(content) > 10000:
+                        content = content[:10000] + "... [TRUNCATED]"
+                    found_files[rel_path] = content
+                    count += 1
+            except Exception:
+                pass
                 
     context["configuration_files"] = found_files
     if dependencies:
