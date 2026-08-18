@@ -2,6 +2,17 @@
 
 All notable changes to the CodeAssist project will be documented in this file.
 
+## [2.1.0] - Statefulness & Q&A Update
+This release transforms CodeAssist from a basic document generator into a persistent, stateful project management engine with built-in caching and conversational codebase querying.
+
+### Added
+- **Master Document Lifecycle (`DOCUMENT_LIFECYCLE.md`):** A strict, universal rulebook automatically injected into all generation skills. It enforces JSON registry caching, surgical document editing, and standardized saving (`[ID]-[Project]-[Scope]-[Type].md`).
+- **JSON Registry Caching:** Introduced `.codeassist/docs/registry.json`. CodeAssist now checks this registry before generating documents, preventing duplicate work and allowing instant retrieval of existing architecture/BRS files.
+- **Agile Subfolders:** Agile documents (Epics, Stories, Tasks) are now intelligently organized into dedicated subfolders based on Epic ID (e.g., `.codeassist/docs/Agile/[Epic-ID]/`) to prevent directory clutter.
+- **Ask Codebase Skill (`ask_codebase.md`):** A new playbook enabling users to ask plain-English or highly technical questions about the codebase. Includes dynamic MCP tool selection and strict anti-hallucination guardrails.
+
+---
+
 ## [2.0.1] - Performance & Stability Overhaul
 This patch focuses on eliminating I/O bottlenecks, resolving JSON-RPC socket corruption, and optimizing memory usage when analyzing project infrastructure.
 

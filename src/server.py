@@ -166,21 +166,34 @@ def register_prompts():
     if not os.path.isdir(SKILLS_DIR):
         return
 
+    lifecycle_path = os.path.join(SKILLS_DIR, "DOCUMENT_LIFECYCLE.md")
+    lifecycle_content = ""
+    if os.path.exists(lifecycle_path):
+        with open(lifecycle_path, 'r', encoding='utf-8') as f:
+            lifecycle_content = f.read()
+
     for skill_file in glob.glob(os.path.join(SKILLS_DIR, "*.md")):
         skill_name = os.path.splitext(os.path.basename(skill_file))[0]
         
-        def make_handler(filepath):
+        # Skip the lifecycle doc itself and non-generation skills if needed
+        if skill_name == "DOCUMENT_LIFECYCLE":
+            continue
+            
+        def make_handler(filepath, name):
             def handler() -> list:
                 with open(filepath, 'r', encoding='utf-8') as f:
                     content = f.read()
+                
+                # Automatically append strict file lifecycle rules to generation skills
+                if name.startswith("generate_") and lifecycle_content:
+                    content += "\n\n" + lifecycle_content
+                    
                 return [content]
             
-            # FastMCP uses the function name if name isn't provided, 
-            # but we provide it explicitly anyway.
-            handler.__name__ = f"prompt_{skill_name}"
+            handler.__name__ = f"prompt_{name}"
             return handler
             
-        mcp.prompt(name=skill_name, description=f"Execute the {skill_name} reverse engineering skill.")(make_handler(skill_file))
+        mcp.prompt(name=skill_name, description=f"Execute the {skill_name} reverse engineering skill.")(make_handler(skill_file, skill_name))
 
 register_prompts()
 
