@@ -30,6 +30,21 @@ class SQLiteStorage(GraphStorage):
                 UNIQUE(source_id, target_id, relationship_type)
             )
         """)
+        # Tracking tables for Differential Indexing
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS file_metadata (
+                filepath TEXT PRIMARY KEY,
+                last_modified REAL
+            )
+        """)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS file_nodes (
+                filepath TEXT,
+                node_id TEXT,
+                PRIMARY KEY (filepath, node_id)
+            )
+        """)
+        
         # Indexes for fast lookup
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_edges_source ON edges(source_id)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_edges_target ON edges(target_id)")
@@ -88,6 +103,37 @@ class SQLiteStorage(GraphStorage):
                 })
                 
         return edges
+
+    # --- Differential Indexing Methods ---
+
+    def get_all_file_metadata(self) -> Dict[str, float]:
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT filepath, last_modified FROM file_metadata")
+        return {row["filepath"]: row["last_modified"] for row in cursor.fetchall()}
+
+    def upsert_file_metadata(self, filepath: str, mtime: float):
+        cursor = self.conn.cursor()
+        cursor.execute("INSERT OR REPLACE INTO file_metadata (filepath, last_modified) VALUES (?, ?)", (filepath, mtime))
+
+    def track_file_node(self, filepath: str, node_id: str):
+        cursor = self.conn.cursor()
+        cursor.execute("INSERT OR IGNORE INTO file_nodes (filepath, node_id) VALUES (?, ?)", (filepath, node_id))
+
+    def delete_file_data(self, filepath: str):
+        cursor = self.conn.cursor()
+        # 1. Delete edges where source or target belongs to the file
+        cursor.execute("""
+            DELETE FROM edges WHERE 
+                source_id IN (SELECT node_id FROM file_nodes WHERE filepath = ?) OR 
+                target_id IN (SELECT node_id FROM file_nodes WHERE filepath = ?)
+        """, (filepath, filepath))
+        
+        # 2. Delete nodes created by the file
+        cursor.execute("DELETE FROM nodes WHERE id IN (SELECT node_id FROM file_nodes WHERE filepath = ?)", (filepath,))
+        
+        # 3. Clean up tracking tables
+        cursor.execute("DELETE FROM file_nodes WHERE filepath = ?", (filepath,))
+        cursor.execute("DELETE FROM file_metadata WHERE filepath = ?", (filepath,))
 
     def commit(self):
         self.conn.commit()

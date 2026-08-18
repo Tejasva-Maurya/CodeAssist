@@ -2,6 +2,19 @@
 
 All notable changes to the CodeAssist project will be documented in this file.
 
+## [2.2.0] - Differential Indexing & Mermaid Fix
+This update addresses severe scaling bottlenecks by converting the indexer into a differential engine, while also squashing a persistent Mermaid diagram rendering bug.
+
+### Added
+- **Differential Indexing Engine:** `indexer.py` now acts as a Delta Engine using OS `last_modified` timestamps. It instantly skips unchanged files, turning massive repository updates from a multi-minute operation into a sub-second task.
+- **Node Tracking & Surgical Deletions:** Upgraded `sqlite_graph.py` and `vector_db.py` to support tracking metadata. If a file is modified or deleted, the system surgically wipes its old nodes and ChromaDB embeddings before re-indexing, preventing "ghost" nodes and data duplication.
+- **On-Demand Update Skill (`refresh_knowledge_base.md`):** Users can now tell the AI to "refresh the knowledge base," triggering the differential indexer automatically.
+
+### Fixed
+- **Mermaid Syntax Parsing Errors:** Added a strict instruction to `DOCUMENT_LIFECYCLE.md` forcing the AI to enclose all Mermaid node labels in double quotes. This completely resolves catastrophic Markdown parsing errors caused by commas, spaces, or parentheses in generated diagrams.
+
+---
+
 ## [2.1.0] - Statefulness & Q&A Update
 This release transforms CodeAssist from a basic document generator into a persistent, stateful project management engine with built-in caching and conversational codebase querying.
 

@@ -28,6 +28,12 @@ class VectorStorage:
             metadatas=metadatas
         )
 
+    def delete_file_embeddings(self, filepath: str):
+        """
+        Surgically delete all embeddings associated with a specific file using metadata filtering.
+        """
+        self.collection.delete(where={"filepath": filepath})
+
     def search(self, query: str, n_results: int = 5) -> List[Dict[str, Any]]:
         """
         Search for the most relevant code chunks or comments based on semantic meaning.
