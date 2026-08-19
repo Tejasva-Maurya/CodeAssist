@@ -30,4 +30,8 @@ When generating Architecture, Flowchart, or any Mermaid diagrams:
 *   **ALWAYS Quote Node Labels:** You MUST enclose node labels in double quotes if they contain commas, parentheses, brackets, or other special characters. 
     *   *Correct:* `id["Label (Extra Info), Text"]`
     *   *Incorrect:* `id[Label (Extra Info), Text]`
-*   This is a strict requirement to prevent catastrophic Markdown parsing errors when the user views the document.
+*   **Semantic Coloring:** You MUST use Mermaid `classDef` and `class` statements to color-code components based on their type to make diagrams visually appealing and easy to read. Use the following palette:
+    *   `classDef database fill:#1168bd,stroke:#0b4884,color:#ffffff;` (For databases/storage)
+    *   `classDef external fill:#999999,stroke:#666666,color:#ffffff;` (For external/3rd party APIs)
+    *   `classDef internal fill:#118a36,stroke:#094a1d,color:#ffffff;` (For internal services/classes)
+    *   `classDef queue fill:#e0871d,stroke:#b36912,color:#ffffff;` (For message queues/event buses)

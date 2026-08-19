@@ -25,12 +25,83 @@ You MUST use the CodeAssist MCP tools (`semantic_code_search`, `query_architectu
 - Use the output of this tool to authoritatively declare what databases, message brokers, and framework versions the repository uses. Because this tool feeds you the raw configuration files, you do not need to guess, hallucinate, or cite your sources.
 - **Resiliency Patterns:** Use `semantic_code_search("transactional outbox", "event log", "resilient publishing", "circuit breaker")` to identify the mechanisms used for fault tolerance and safe message delivery (e.g., how events are safely persisted alongside business transactions).
 
-**Step 5: Output Generation**
-Format the output strictly as Markdown, containing:
-1. **Version Control Block:** Include a blockquote at the very beginning of the document specifying the Git Commit Hash and Branch used to generate this document (obtained from `get_project_context`).
-2. **System Architecture Overview:** High-level summary of the bounded contexts and their responsibilities. Include a **C4 Level 1 Context Diagram (Mermaid)** showing the system and its external users/dependencies.
-3. **Component Topology (Mermaid Diagram):** Generate a **C4 Level 2/3 Component Diagram (Mermaid)** visualizing the modules, microservices, and their dependencies on data stores or message brokers derived from Steps 3 and 4. Do not hallucinate connections.
-4. **Core Workflow / Flowchart (Mermaid):** Generate a **Mermaid Flowchart or Sequence Diagram** depicting the most critical cross-boundary execution path discovered in Step 3.
-5. **Hierarchy Structure:** Provide a text-based hierarchy tree mapping the core modules and their physical folder paths or namespaces to visualize the repository layout.
-6. **Infrastructure Details:** List the data stores, caches, and message brokers discovered in Step 4.
-7. **Graph Metrics:** Include EXACT metrics obtained from your queries (e.g., "The Order module contains X classes and Y methods with Z cross-module dependencies").
+**Step 5: Output Generation (STRICT TEMPLATE)**
+Format the output strictly as Markdown, copying the exact structure of the Enterprise Architecture Template below. Do NOT skip sections. If data is unavailable, write "Data unavailable in codebase".
+
+```markdown
+> **Version Control:** Git Commit [HASH] on Branch [BRANCH]
+
+## 1. Executive Summary & Business Context
+*   **Purpose:** [Why the system exists]
+*   **Business Capabilities:** [Core functions]
+*   **Target Audience/Users:** [Who uses it]
+
+## 2. System Context & Scope
+*(Insert C4 Level 1 Context Diagram - Mermaid flowchart with semantic coloring)*
+
+### 2.1 External Systems Inventory
+| System Name | Direction (In/Out) | Protocol | Purpose / Business Function |
+| :--- | :--- | :--- | :--- |
+| [System] | [Direction] | [Protocol] | [Purpose] |
+
+## 3. Architecture Overview & Strategy
+*   **Architecture Style:** [e.g., Microservices, Modular Monolith]
+*   **Technology Stack:** [Languages, Frameworks, DBs, Brokers from get_project_context]
+
+### 3.1 Non-Functional Requirements (Architectural Characteristics)
+| Attribute | Target / Strategy |
+| :--- | :--- |
+| Scalability | [Derived strategy] |
+| Security | [Derived strategy] |
+
+## 4. Container & Component Breakdown
+*(Insert C4 Level 2 Container Diagram - Mermaid flowchart with semantic coloring)*
+
+### 4.1 Deployable Units (Containers)
+**Container Name:** [Name]
+*   **Responsibility:** [Purpose]
+*   **Key Internal Components:** [List internal modules]
+*   **Owned Data:** [Databases it owns]
+
+## 5. Integration & APIs
+### 5.1 Synchronous APIs (REST / GraphQL / gRPC)
+| API / Endpoint | Consumer | Method/Protocol | Purpose |
+| :--- | :--- | :--- | :--- |
+
+### 5.2 Asynchronous Messaging (Events / Queues)
+| Topic / Queue Name | Producer | Consumer | Payload/Schema Focus |
+| :--- | :--- | :--- | :--- |
+
+## 6. Runtime Workflows & Data Flow
+*(Insert UML Sequence Diagram - Mermaid sequenceDiagram showing step-by-step calls)*
+
+### 6.1 Primary Flow: [Flow Name]
+*   **Trigger:** [Action]
+*   **Flow Description:** [Step by step logic]
+
+## 7. Data & Information Architecture
+*(Insert Entity Relationship Diagram (ERD) - Mermaid erDiagram)*
+
+### 7.1 Core Domain Entities
+| Entity | Description | Owner Service |
+| :--- | :--- | :--- |
+
+### 7.2 Data Integrity & Storage Strategy
+*   **Databases Used:** [List databases and purpose]
+*   **Caching Strategy:** [Caching approach]
+
+## 8. Deployment & Infrastructure View
+*   **Hosting Environment:** [e.g., K8s, Docker]
+*   **CI/CD Pipeline:** [Deployment flow if known]
+
+## 9. Cross-Cutting Concepts
+### 9.1 Security
+*   **Authentication/Authorization:** [Auth strategy]
+
+### 9.2 Observability & Monitoring
+*   **Logging/Metrics:** [Observability stack]
+
+## 10. Architecture Decision Records (ADRs)
+| ADR # | Date | Context / Problem | Decision Made | Consequences / Trade-offs |
+| :--- | :--- | :--- | :--- | :--- |
+```

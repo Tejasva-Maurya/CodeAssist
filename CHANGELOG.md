@@ -2,6 +2,18 @@
 
 All notable changes to the CodeAssist project will be documented in this file.
 
+## [2.3.0] - Design Standardization & LLD
+This release focuses on eliminating LLM document hallucination and variance by enforcing strict, industry-standard architectural templates and visually appealing diagrams.
+
+### Added
+- **Low-Level Design (LLD) Skill (`generate_lld.md`):** A granular documentation playbook designed to analyze a specific component or package. It forces the AI to map out Class Interfaces, DB Entities, DTO validation rules, and algorithmic flows. Includes strict anti-hallucination guardrails and mandatory Mermaid workflow diagrams.
+- **Strict Enterprise Architecture Template:** Completely overhauled `generate_architecture.md`. It now explicitly requires the AI to populate a rigid C4-model template containing sections for Non-Functional Requirements, Security strategies, ERDs, and ADRs (Architecture Decision Records).
+
+### Changed
+- **Colorful Mermaid Diagrams:** Upgraded `DOCUMENT_LIFECYCLE.md` to enforce semantic color-coding in all AI-generated Mermaid flowcharts and diagrams using `classDef` (e.g., Databases in blue, External APIs in gray, Internal services in green).
+
+---
+
 ## [2.2.0] - Differential Indexing & Mermaid Fix
 This update addresses severe scaling bottlenecks by converting the indexer into a differential engine, while also squashing a persistent Mermaid diagram rendering bug.
 
