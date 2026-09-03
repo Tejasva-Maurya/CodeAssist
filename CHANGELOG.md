@@ -2,6 +2,28 @@
 
 All notable changes to the CodeAssist project will be documented in this file.
 
+## [2.6.0] - Global Standardization & Tool Constraints
+This release finalizes the transformation of CodeAssist into an Enterprise-Grade 0-hallucination engine by locking down LLM markdown variance and strictly enforcing MCP tool boundaries.
+
+### Changed
+- **Global Shell Ban (Tool Constraints):** Injected a `CRITICAL TOOL CONSTRAINT` into every single playbook. The AI is now explicitly forbidden from using OS-level shell commands, scripts, or `grep`/`cat` tools to bypass the Data Warehouse, forcing 100% reliance on the MCP graph/vector tools.
+- **Strict BRS Template:** The `generate_brs.md` skill now forces the LLM to output a rigid Business Requirement Specification, including Markdown tables for Domain Capabilities/Metrics and mandated Sub-headers for Critical Workflows.
+- **Strict API Spec Template:** The `generate_api_spec.md` skill now enforces a rigid REST/gRPC Markdown template, forcing the LLM to map routes, payloads, and DTO validations strictly inside Markdown Tables.
+- **Strict Feature List Template:** The `generate_feature_list.md` skill now enforces a strict 3-tier Header mapping (H2/H3/List) to completely eliminate output variance.
+
+---
+
+## [2.5.0] - Enterprise Agile Workflow Upgrade
+This release upgrades the Agile Backlog capabilities, allowing CodeAssist to act as a Senior Technical Product Manager by distinguishing between functional needs, backend system requirements, and estimating complexity.
+
+### Changed
+- **Functional vs. Technical Stories:** The `generate_agile_backlog.md` playbook now explicitly generates both Functional Stories (user-facing value) and Technical Stories (backend refactoring/migrations) based on Graph dependencies.
+- **Pluggable Story Point Estimation:** Added dynamic Story Point estimation to Level 2 tickets. The AI will look for a custom `.codeassist/estimation_template.md` to use organizational rules (e.g., T-Shirt sizing), gracefully falling back to mathematical Fibonacci sequence estimation if the template is absent.
+- **Time-Boxed Spikes:** Formalized Spikes as Level 2 Research tickets with strict Time-boxes and Expected Outcomes to prevent runaway research tasks.
+- **CSV Export Upgrade:** The automated Jira/Azure DevOps CSV export now includes a `StoryPoints` column for seamless Sprint capacity planning.
+
+---
+
 ## [2.4.0] - Database Integration & Technical Debt Analysis
 This release integrates database schemas and stored procedures directly into the CodeAssist Data Warehouse, and introduces mathematical dead code detection.
 

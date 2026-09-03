@@ -1,4 +1,4 @@
-# CodeAssist Reverse Engineering Engine (v2.4.0)
+# CodeAssist Reverse Engineering Engine (v2.5.0)
 
 A highly scalable, stateful, and 0-hallucination engine for reverse-engineering massive codebases into actionable insights, Business Requirements, Architecture Documents, and Agile pipelines.
 
@@ -11,10 +11,11 @@ CodeAssist solves the "massive codebase LLM context window" problem by parsing a
 3. **MCP Server:** A FastMCP-powered Python server connects to your LLM (Claude Desktop, Cursor, Antigravity) and exposes surgical tools (`get_node_details`, `query_architecture_graph`, `get_source_code`).
 4. **Skills / Playbooks:** We provide highly tuned Markdown instructions in the `skills/` folder that act as generic algorithms, forcing the LLM to traverse the graph and document distributed sagas and enterprise architectures without hallucinating.
 
-## 🚀 Key Features (v2.0 - v2.4 Updates)
+## 🚀 Key Features (v2.0 - v2.5 Updates)
 
 CodeAssist has evolved from a basic document generator into a persistent project management engine:
 
+*   **🎯 Agile Backlog Estimation (v2.5):** Separates Functional and Technical stories, with pluggable estimation templates and mathematical Fibonacci point estimation.
 *   **🗄️ Database Integration (v2.4):** Uses `sqlglot` and Regex to structurally extract SQL Tables, Views, and Stored Procedures, embedding their DDL/logic directly into ChromaDB for instant semantic retrieval without FOO collisions.
 *   **🧹 Technical Debt Reporting (v2.4):** Graph-based mathematical detection of dead code. Run `generate_technical_debt_report` to instantly find orphaned database tables and unreferenced methods with an in-degree of 0.
 *   **⚡ Differential Indexing (v2.2):** Re-indexing a codebase is now lightning fast. The indexer uses OS timestamps to surgically skip unchanged files and wipe/re-insert data only for modified or deleted files. Update your knowledge base on-demand!
