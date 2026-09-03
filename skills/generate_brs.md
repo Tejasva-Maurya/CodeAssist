@@ -4,6 +4,8 @@
 Use this skill to reverse-engineer an Enterprise-Level Business Requirement Specification (BRS) document dynamically, regardless of the underlying language or framework.
 
 **Strict Algorithmic Playbook:**
+> **CRITICAL TOOL CONSTRAINT:** You are strictly forbidden from using shell scripts, terminal commands, or local file-reading tools (like `grep`, `cat`, or `run_command`) to extract codebase information or Git hashes. You MUST exclusively use the CodeAssist MCP tools (`query_architecture_graph`, `semantic_code_search`, `get_node_details`, `get_source_code`, `get_project_context`). If an MCP tool fails or returns empty data, you MUST report the failure directly to the user instead of attempting to bypass it with terminal commands.
+
 You MUST use the CodeAssist MCP tools (`semantic_code_search`, `query_architecture_graph`, `get_node_details`) to extract facts. Do NOT manually read raw source code files unless explicitly instructed by this algorithm.
 
 **Step 1: Domain & Entry Point Discovery (Conceptual Semantic Search)**
@@ -28,11 +30,33 @@ You MUST use the CodeAssist MCP tools (`semantic_code_search`, `query_architectu
 - Call the `get_project_context` MCP tool. This tool will automatically scan the project for language-specific configuration files (e.g., `pom.xml`, `.csproj`, `AppHost/Program.cs`, `docker-compose.yml`) and return their exact contents.
 - Use the output of this tool to authoritatively declare what databases, message brokers, and framework versions the repository uses. Because this tool feeds you the raw configuration files, you do not need to guess, hallucinate, or cite your sources.
 
-**Step 5: Output Generation**
-Format the output strictly as Markdown, containing:
-1. **Version Control Block:** Include a blockquote at the very beginning of the document specifying the Git Commit Hash and Branch used to generate this document (obtained from `get_project_context`).
-2. **Executive Summary:** High-level summary of what the system does based on your semantic searches.
-3. **Business Domain:** Core capabilities derived from the domain entities.
-4. **Microservices / Module Breakdown:** Include EXACT metrics (e.g., "Module X contains Y classes and Z methods") and list the key classes based on the Graph DB.
-5. **Data Flows:** Detail the execution paths you traced in Step 3. Include Mermaid diagrams to visualize `CALLS` flows.
-6. **Data Architecture:** The infrastructure you discovered in Step 4.
+**Step 5: Output Generation (STRICT TEMPLATE)**
+Format the output strictly as Markdown, copying the exact structure below. Do NOT skip sections.
+
+```markdown
+> **Version Control:** Git Commit [HASH] on Branch [BRANCH] (Retrieved via get_project_context)
+
+## 1. Executive Summary
+[High-level summary of the system based on semantic searches]
+
+## 2. Business Domain & Capabilities
+| Domain Aggregate | Core Capability | Associated Roles/Actors |
+| :--- | :--- | :--- |
+
+## 3. Module Breakdown & Metrics
+| Module/Namespace | Class Count | Method Count | Primary Purpose |
+| :--- | :--- | :--- | :--- |
+
+## 4. Critical Business Workflows (Data Flows)
+*(Insert UML Sequence Diagram - Mermaid sequenceDiagram showing Business Actors and Core Flow)*
+
+### 4.1 Flow: [Workflow Name]
+*   **Trigger:** [Event/Action]
+*   **Business Rules:** [Extracted from Domain entities/handlers]
+*   **Outcome:** [Database state change or Event published]
+
+## 5. Data & Infrastructure Architecture
+| Component Type | Technology Used | Purpose in Domain |
+| :--- | :--- | :--- |
+| Database | [e.g., Postgres] | [Storage purpose] |
+```

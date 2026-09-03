@@ -1,4 +1,4 @@
-# CodeAssist Reverse Engineering Engine (v2.5.0)
+# CodeAssist Reverse Engineering Engine (v2.6.0)
 
 A highly scalable, stateful, and 0-hallucination engine for reverse-engineering massive codebases into actionable insights, Business Requirements, Architecture Documents, and Agile pipelines.
 
@@ -11,10 +11,11 @@ CodeAssist solves the "massive codebase LLM context window" problem by parsing a
 3. **MCP Server:** A FastMCP-powered Python server connects to your LLM (Claude Desktop, Cursor, Antigravity) and exposes surgical tools (`get_node_details`, `query_architecture_graph`, `get_source_code`).
 4. **Skills / Playbooks:** We provide highly tuned Markdown instructions in the `skills/` folder that act as generic algorithms, forcing the LLM to traverse the graph and document distributed sagas and enterprise architectures without hallucinating.
 
-## 🚀 Key Features (v2.0 - v2.5 Updates)
+## 🚀 Key Features (v2.0 - v2.6 Updates)
 
 CodeAssist has evolved from a basic document generator into a persistent project management engine:
 
+*   **🛡️ Global Standardization & Tool Constraints (v2.6):** Enforces rigid 0-hallucination Markdown templates and strictly bans LLM shell execution, forcing 100% reliance on the MCP Graph DB.
 *   **🎯 Agile Backlog Estimation (v2.5):** Separates Functional and Technical stories, with pluggable estimation templates and mathematical Fibonacci point estimation.
 *   **🗄️ Database Integration (v2.4):** Uses `sqlglot` and Regex to structurally extract SQL Tables, Views, and Stored Procedures, embedding their DDL/logic directly into ChromaDB for instant semantic retrieval without FOO collisions.
 *   **🧹 Technical Debt Reporting (v2.4):** Graph-based mathematical detection of dead code. Run `generate_technical_debt_report` to instantly find orphaned database tables and unreferenced methods with an in-degree of 0.
@@ -63,6 +64,9 @@ TARGET_REPO=/path/to/target/repository python src/server.py
 
 ### 4. Scoped Documentation Generation
 CodeAssist natively supports generating documentation for specific modules, folders, or single microservices! For an in-depth explanation of how CodeAssist handles Graph Boundaries, Monorepos vs. Microservice Repos, and Frontend-only scoping, please read the **[`SCOPING_AND_BOUNDARIES.md`](./SCOPING_AND_BOUNDARIES.md)** guide.
+
+### 5. Deep Architecture FAQ
+Want to know how CodeAssist prevents Vector Database Hallucinations? Wondering how it handles "Comment Rot" (when developers forget to update comments)? Read the **[`SYSTEM_ARCHITECTURE_FAQ.md`](./docs/faq/SYSTEM_ARCHITECTURE_FAQ.md)** for a deep dive into the engineering decisions behind the engine.
 
 ---
 

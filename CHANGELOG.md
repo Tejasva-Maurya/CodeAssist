@@ -10,6 +10,7 @@ This release finalizes the transformation of CodeAssist into an Enterprise-Grade
 - **Strict BRS Template:** The `generate_brs.md` skill now forces the LLM to output a rigid Business Requirement Specification, including Markdown tables for Domain Capabilities/Metrics and mandated Sub-headers for Critical Workflows.
 - **Strict API Spec Template:** The `generate_api_spec.md` skill now enforces a rigid REST/gRPC Markdown template, forcing the LLM to map routes, payloads, and DTO validations strictly inside Markdown Tables.
 - **Strict Feature List Template:** The `generate_feature_list.md` skill now enforces a strict 3-tier Header mapping (H2/H3/List) to completely eliminate output variance.
+- **Architecture FAQ:** Added `docs/faq/SYSTEM_ARCHITECTURE_FAQ.md` to formally document deep architectural decisions regarding Vector DB hallucinations, Comment Rot, and SQL FOO collisions.
 
 ---
 

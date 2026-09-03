@@ -4,6 +4,8 @@
 Use this skill to reverse-engineer a comprehensive API Specification Document (REST, gRPC, or GraphQL) directly from the codebase's Abstract Syntax Tree (AST) and Vector semantic data.
 
 **Strict Algorithmic Playbook:**
+> **CRITICAL TOOL CONSTRAINT:** You are strictly forbidden from using shell scripts, terminal commands, or local file-reading tools (like `grep`, `cat`, or `run_command`) to extract codebase information or Git hashes. You MUST exclusively use the CodeAssist MCP tools (`query_architecture_graph`, `semantic_code_search`, `get_node_details`, `get_source_code`, `get_project_context`). If an MCP tool fails or returns empty data, you MUST report the failure directly to the user instead of attempting to bypass it with terminal commands.
+
 You MUST use the CodeAssist MCP tools (`semantic_code_search`, `query_architecture_graph`, `get_node_details`) to extract facts. Do NOT manually read raw source code files unless explicitly instructed.
 
 **Step 1: API Discovery (Semantic Search)**
@@ -22,14 +24,30 @@ You MUST use the CodeAssist MCP tools (`semantic_code_search`, `query_architectu
 - Call the `get_project_context` MCP tool to retrieve global configuration files. 
 - Use the output to identify exactly what security, authentication (e.g., JWT, OAuth), and API frameworks are configured in the project's root setup.
 
-**Step 5: Output Generation**
-Format the output strictly as Markdown, containing:
-1. **Version Control Block:** Include a blockquote at the very beginning of the document specifying the Git Commit Hash and Branch used to generate this document (obtained from `get_project_context`).
-2. **API Overview:** High-level summary of the API surface (e.g., total number of endpoints, protocols used like HTTP/gRPC).
-3. **Authentication/Security:** The security mechanisms discovered in Step 4.
-4. **Endpoint Reference:** 
-   - A detailed list of all discovered APIs. 
-   - Group them by Module or Controller.
-   - For each endpoint, include: `[HTTP Method] /route/path` (if REST), the Request Payload schema, and the Response format.
-   - Summarize the business logic of each endpoint based on the comments retrieved in Step 2.
-5. **Data Models (DTOs):** A brief reference of the core JSON/Protobuf data shapes exchanged.
+**Step 5: Output Generation (STRICT TEMPLATE)**
+Format the output strictly as Markdown, copying the exact structure below. Do NOT skip sections.
+
+```markdown
+> **Version Control:** Git Commit [HASH] on Branch [BRANCH] (Retrieved via get_project_context)
+
+## 1. API Overview
+*   **Total Endpoints Discovered:** [Count]
+*   **Primary Protocols:** [HTTP, gRPC, etc.]
+
+## 2. Authentication & Security
+*   **Security Mechanisms:** [JWT, OAuth, etc. - From Step 4]
+
+## 3. Endpoint Reference
+*(Group by Controller/Module)*
+
+### 3.1 Module: [Module Name]
+
+| HTTP Method | Route/Path | Request Payload | Response Model | Purpose |
+| :--- | :--- | :--- | :--- | :--- |
+| `GET` | `/api/v1/resource` | `None` | `ResourceDTO` | [Purpose] |
+
+## 4. Data Models (DTOs)
+| Schema Name | Field Name | Data Type | Validation / Rules |
+| :--- | :--- | :--- | :--- |
+| `ResourceDTO` | `id` | `UUID` | Required |
+```

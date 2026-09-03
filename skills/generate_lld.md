@@ -4,6 +4,8 @@
 Use this skill to reverse-engineer a highly granular Low-Level Design (LLD) document for a specific component, module, or package. This dives into class relationships, DTOs, Database Entities, and algorithmic workflows.
 
 **Strict Algorithmic Playbook:**
+> **CRITICAL TOOL CONSTRAINT:** You are strictly forbidden from using shell scripts, terminal commands, or local file-reading tools (like `grep`, `cat`, or `run_command`) to extract codebase information or Git hashes. You MUST exclusively use the CodeAssist MCP tools (`query_architecture_graph`, `semantic_code_search`, `get_node_details`, `get_source_code`, `get_project_context`). If an MCP tool fails or returns empty data, you MUST report the failure directly to the user instead of attempting to bypass it with terminal commands.
+
 
 **Step 1: Scope Definition & Discovery**
 - Use `semantic_code_search` and `query_architecture_graph` to isolate the specific classes and files belonging to the target module. Do not scan the entire repository.

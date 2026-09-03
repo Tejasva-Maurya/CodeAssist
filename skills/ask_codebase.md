@@ -4,6 +4,8 @@
 Use this skill to answer user queries about the codebase. Queries can range from non-technical (e.g., "how does payment work?") to deeply technical (e.g., "what services depend on the OrderRepository?").
 
 **Strict Algorithmic Playbook:**
+> **CRITICAL TOOL CONSTRAINT:** You are strictly forbidden from using shell scripts, terminal commands, or local file-reading tools (like `grep`, `cat`, or `run_command`) to extract codebase information or Git hashes. You MUST exclusively use the CodeAssist MCP tools (`query_architecture_graph`, `semantic_code_search`, `get_node_details`, `get_source_code`, `get_project_context`). If an MCP tool fails or returns empty data, you MUST report the failure directly to the user instead of attempting to bypass it with terminal commands.
+
 
 **Step 1: Intent & Persona Analysis**
 *   Analyze the user's prompt to determine their intent and technical depth.
