@@ -3,6 +3,7 @@ tree-sitter-java>=0.21.0
 chromadb>=0.4.24
 networkx>=3.2.1
 pydantic>=2.7.0
+sqlglot>=23.0.0
 
 mcp>=1.0.0
 

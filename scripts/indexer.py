@@ -9,7 +9,7 @@ from storage.sqlite_graph import SQLiteStorage
 from storage.vector_db import VectorStorage
 from pipeline.loader import PipelineLoader
 
-SUPPORTED_EXTENSIONS = {'.java', '.cs', '.html', '.htm', '.css'}
+SUPPORTED_EXTENSIONS = {'.java', '.cs', '.html', '.htm', '.css', '.sql'}
 IGNORE_DIRS = {'.git', 'node_modules', 'venv', '.venv', 'dist', 'build', '.codeassist'}
 
 def build_index(repo_path: str):

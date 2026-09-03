@@ -53,20 +53,22 @@ class PipelineLoader:
             
         # 3. Add Classes and Methods
         for cls in entity.classes:
-            class_id = f"class:{cls.name}"
+            prefix_cls = "class" if cls.type == "Class" else cls.type.lower()
+            class_id = f"{prefix_cls}:{cls.name}"
             self.graph_db.add_node(
                 node_id=class_id,
-                label="Class",
+                label=cls.type,
                 properties={"name": cls.name, "filepath": filepath}
             )
             self._track(filepath, class_id)
             self.graph_db.add_edge(file_id, class_id, "DECLARES_CLASS")
             
             for method in cls.methods:
-                method_id = f"method:{cls.name}.{method.name}"
+                prefix_method = "method" if method.type == "Method" else method.type.lower()
+                method_id = f"{prefix_method}:{cls.name}.{method.name}"
                 self.graph_db.add_node(
                     node_id=method_id,
-                    label="Method",
+                    label=method.type,
                     properties={"name": method.name, "signature": method.signature}
                 )
                 self._track(filepath, method_id)

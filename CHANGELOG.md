@@ -2,6 +2,15 @@
 
 All notable changes to the CodeAssist project will be documented in this file.
 
+## [2.4.0] - Database Integration & Technical Debt Analysis
+This release integrates database schemas and stored procedures directly into the CodeAssist Data Warehouse, and introduces mathematical dead code detection.
+
+### Added
+- **SQL Hybrid Extractor:** Added `sqlglot` dependency and `SqlExtractor`. The system now parses `.sql` files using a hybrid approach: structural AST extraction for Tables, Views, and Procedures (avoiding FOO collisions via FQNs), and a robust Vector fallback that embeds raw DDL logic into ChromaDB to ensure no business logic is missed.
+- **Technical Debt & Dead Code Report Skill:** Added `generate_technical_debt_report.md`. This playbook instructs the AI to mathematically identify dead code by querying the graph database for orphaned nodes (e.g., Tables or Methods with an in-degree of 0), significantly aiding in repository cleanup and migration scoping.
+
+---
+
 ## [2.3.0] - Design Standardization & LLD
 This release focuses on eliminating LLM document hallucination and variance by enforcing strict, industry-standard architectural templates and visually appealing diagrams.
 

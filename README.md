@@ -1,4 +1,4 @@
-# CodeAssist Reverse Engineering Engine (v2.3.0)
+# CodeAssist Reverse Engineering Engine (v2.4.0)
 
 A highly scalable, stateful, and 0-hallucination engine for reverse-engineering massive codebases into actionable insights, Business Requirements, Architecture Documents, and Agile pipelines.
 
@@ -6,15 +6,17 @@ A highly scalable, stateful, and 0-hallucination engine for reverse-engineering 
 
 CodeAssist solves the "massive codebase LLM context window" problem by parsing a target repository locally into a **Data Warehouse** before the LLM ever sees it. 
 
-1. **Tree-sitter AST Extraction:** Scripts parse C#, Java, HTML, and CSS to extract structural metadata (classes, methods, relationships).
-2. **Local Storage:** The structure is stored in a fast **SQLite Graph Database**, while docstrings and comments are vectorized into a **ChromaDB Vector Database**.
+1. **AST & SQL Extraction:** Scripts parse C#, Java, HTML, CSS, and SQL to extract structural metadata (classes, methods, relationships, database tables, procedures).
+2. **Local Storage:** The structure is stored in a fast **SQLite Graph Database**, while docstrings, comments, and SQL logic are vectorized into a **ChromaDB Vector Database**.
 3. **MCP Server:** A FastMCP-powered Python server connects to your LLM (Claude Desktop, Cursor, Antigravity) and exposes surgical tools (`get_node_details`, `query_architecture_graph`, `get_source_code`).
 4. **Skills / Playbooks:** We provide highly tuned Markdown instructions in the `skills/` folder that act as generic algorithms, forcing the LLM to traverse the graph and document distributed sagas and enterprise architectures without hallucinating.
 
-## 🚀 Key Features (v2.0 - v2.3 Updates)
+## 🚀 Key Features (v2.0 - v2.4 Updates)
 
 CodeAssist has evolved from a basic document generator into a persistent project management engine:
 
+*   **🗄️ Database Integration (v2.4):** Uses `sqlglot` and Regex to structurally extract SQL Tables, Views, and Stored Procedures, embedding their DDL/logic directly into ChromaDB for instant semantic retrieval without FOO collisions.
+*   **🧹 Technical Debt Reporting (v2.4):** Graph-based mathematical detection of dead code. Run `generate_technical_debt_report` to instantly find orphaned database tables and unreferenced methods with an in-degree of 0.
 *   **⚡ Differential Indexing (v2.2):** Re-indexing a codebase is now lightning fast. The indexer uses OS timestamps to surgically skip unchanged files and wipe/re-insert data only for modified or deleted files. Update your knowledge base on-demand!
 *   **📚 Standardized Documentation (v2.3):** All generation skills (`generate_architecture`, `generate_lld`) strictly adhere to industry-standard C4 and UML templates. The AI cannot hallucinate or skip critical sections like Non-Functional Requirements, DB Entities, or Security strategies.
 *   **🎨 Semantic Visuals (v2.3):** Automatically generates stunning, color-coded Mermaid flowcharts and C4 diagrams (e.g., databases are blue, external APIs are gray, internal services are green).

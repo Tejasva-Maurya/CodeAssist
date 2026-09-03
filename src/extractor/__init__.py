@@ -3,6 +3,7 @@ from .java import JavaExtractor
 from .c_sharp import CSharpExtractor
 from .html import HtmlExtractor
 from .css import CssExtractor
+from .sql import SqlExtractor
 
 def get_extractor(filepath: str) -> BaseExtractor:
     if filepath.endswith(".java"):
@@ -13,6 +14,8 @@ def get_extractor(filepath: str) -> BaseExtractor:
         return HtmlExtractor()
     elif filepath.endswith(".css"):
         return CssExtractor()
+    elif filepath.endswith(".sql"):
+        return SqlExtractor()
     else:
         raise ValueError(f"No extractor found for {filepath}")
 
@@ -26,5 +29,6 @@ __all__ = [
     "JavaExtractor",
     "CSharpExtractor",
     "HtmlExtractor",
-    "CssExtractor"
+    "CssExtractor",
+    "SqlExtractor"
 ]

@@ -11,6 +11,7 @@ class CommentEntity(BaseModel):
 
 class MethodEntity(BaseModel):
     name: str
+    type: str = "Method" # e.g. Method, StoredProcedure
     signature: str
     start_line: int
     end_line: int
@@ -19,6 +20,7 @@ class MethodEntity(BaseModel):
 
 class ClassEntity(BaseModel):
     name: str
+    type: str = "Class" # e.g. Class, DatabaseTable
     start_line: int
     end_line: int
     methods: List[MethodEntity] = []
